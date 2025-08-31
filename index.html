@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PackTrack Pro - Travel Inventory Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal">
+        <div class="auth-container">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-suitcase-rolling"></i>
+                    <h1>PackTrack Pro</h1>
+                </div>
+                <p>Professional Travel Inventory Management</p>
+            </div>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="auth-form active">
+                <h2>Welcome Back</h2>
+                <form id="loginFormEl">
+                    <div class="form-group">
+                        <label for="loginEmail">Email</label>
+                        <input type="email" id="loginEmail" required>
+                        <div class="error-message" id="loginEmailError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" required>
+                        <div class="error-message" id="loginPasswordError"></div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">
+                        <i class="fas fa-sign-in-alt"></i> Sign In
+                    </button>
+                </form>
+                <p class="auth-switch">
+                    Don't have an account? 
+                    <a href="#" id="showRegister">Create one here</a>
+                </p>
+            </div>
+            
+            <!-- Register Form -->
+            <div id="registerForm" class="auth-form">
+                <h2>Create Account</h2>
+                <form id="registerFormEl">
+                    <div class="form-group">
+                        <label for="registerName">Full Name</label>
+                        <input type="text" id="registerName" required>
+                        <div class="error-message" id="registerNameError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">Email</label>
+                        <input type="email" id="registerEmail" required>
+                        <div class="error-message" id="registerEmailError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">Password</label>
+                        <input type="password" id="registerPassword" minlength="6" required>
+                        <div class="error-message" id="registerPasswordError"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required>
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+                <p class="auth-switch">
+                    Already have an account? 
+                    <a href="#" id="showLogin">Sign in here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="mainApp" style="display: none;">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-suitcase-rolling"></i>
+                    <h1>PackTrack Pro</h1>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span id="totalItems">0</span>
+                        <small>Items</small>
+                    </div>
+                    <div class="stat-item">
+                        <span id="totalBoxes">0</span>
+                        <small>Boxes</small>
+                    </div>
+                </div>
+                <div class="user-menu">
+                    <span id="userName" class="user-name">Welcome, User!</span>
+                    <button id="logoutBtn" class="btn-secondary btn-sm">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <nav class="tab-navigation">
+            <button class="tab-btn active" data-tab="add">
+                <i class="fas fa-plus"></i> Add Items
+            </button>
+            <button class="tab-btn" data-tab="search">
+                <i class="fas fa-search"></i> Search
+            </button>
+            <button class="tab-btn" data-tab="manage">
+                <i class="fas fa-list"></i> Manage
+            </button>
+            <button class="tab-btn" data-tab="export">
+                <i class="fas fa-download"></i> Export
+            </button>
+        </nav>
+
+        <main class="main-content">
+            <!-- Add Items Tab -->
+            <section id="add-tab" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-plus-circle"></i> Add New Item</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemName">Item Name *</label>
+                                <input type="text" id="itemName" placeholder="e.g., Blue Sweater" required>
+                                <div class="error-message" id="itemNameError"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="boxName">Box/Container *</label>
+                                <input type="text" id="boxName" placeholder="e.g., Box 1, Suitcase A" required list="boxSuggestions">
+                                <datalist id="boxSuggestions"></datalist>
+                                <div class="error-message" id="boxNameError"></div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select id="category">
+                                    <option value="">Select category</option>
+                                    <option value="Clothing">Clothing</option>
+                                    <option value="Electronics">Electronics</option>
+                                    <option value="Personal Care">Personal Care</option>
+                                    <option value="Documents">Documents</option>
+                                    <option value="Accessories">Accessories</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" id="description" placeholder="Optional details">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button id="addItemBtn" class="btn-primary">
+                                <i class="fas fa-plus"></i> Add Item
+                            </button>
+                            <button id="addMultipleBtn" class="btn-secondary">
+                                <i class="fas fa-layer-group"></i> Bulk Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Add Modal -->
+                <div id="bulkAddModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Bulk Add Items</h3>
+                            <span class="close">&times;</span>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="bulkBox">Box/Container for all items *</label>
+                                <input type="text" id="bulkBox" placeholder="e.g., Box 2" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bulkItems">Items (one per line) *</label>
+                                <textarea id="bulkItems" rows="10" placeholder="Red Shirt&#10;Blue Jeans&#10;White Sneakers"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button id="bulkAddConfirm" class="btn-primary">Add All Items</button>
+                            <button class="btn-secondary close">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Search Tab -->
+            <section id="search-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-search"></i> Find Your Items</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="search-controls">
+                            <div class="search-group">
+                                <input type="text" id="searchInput" placeholder="Search items, boxes, categories...">
+                                <button id="searchBtn" class="btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                            <div class="filter-group">
+                                <select id="categoryFilter">
+                                    <option value="">All categories</option>
+                                </select>
+                                <button id="clearSearchBtn" class="btn-secondary">Clear</button>
+                            </div>
+                        </div>
+                        <div id="searchResults" class="results-container"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Tab -->
+            <section id="manage-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-list"></i> Inventory Management</h2>
+                        <div class="card-actions">
+                            <select id="boxFilter">
+                                <option value="">All boxes</option>
+                            </select>
+                            <select id="sortBy">
+                                <option value="name">Sort by Name</option>
+                                <option value="box">Sort by Box</option>
+                                <option value="category">Sort by Category</option>
+                                <option value="date">Sort by Date Added</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-actions">
+                            <button id="selectAllBtn" class="btn-secondary">
+                                <i class="fas fa-check-square"></i> Select All
+                            </button>
+                            <button id="deleteSelectedBtn" class="btn-danger" disabled>
+                                <i class="fas fa-trash"></i> Delete Selected
+                            </button>
+                            <button id="clearAllBtn" class="btn-danger">
+                                <i class="fas fa-trash-alt"></i> Clear All
+                            </button>
+                        </div>
+                        <div id="itemsList" class="items-table"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Export Tab -->
+            <section id="export-tab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-download"></i> Export & Import</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="export-section">
+                            <h3>Export Data</h3>
+                            <p>Download your inventory data for backup or sharing.</p>
+                            <div class="export-buttons">
+                                <button id="exportJsonBtn" class="btn-primary">
+                                    <i class="fas fa-file-code"></i> Export as JSON
+                                </button>
+                                <button id="exportCsvBtn" class="btn-primary">
+                                    <i class="fas fa-file-csv"></i> Export as CSV
+                                </button>
+                                <button id="printListBtn" class="btn-secondary">
+                                    <i class="fas fa-print"></i> Print List
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="import-section">
+                            <h3>Import Data</h3>
+                            <p>Restore data from a previous backup.</p>
+                            <div class="import-controls">
+                                <input type="file" id="importFile" accept=".json" style="display: none;">
+                                <button id="importBtn" class="btn-secondary">
+                                    <i class="fas fa-file-upload"></i> Import JSON
+                                </button>
+                                <label class="import-options">
+                                    <input type="checkbox" id="mergeImport">
+                                    Merge with existing data
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="app-footer">
+            <p>&copy; 2024 PackTrack Pro - Professional Travel Inventory Management</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

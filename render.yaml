@@ -1,0 +1,35 @@
+# Render Blueprint for PackTrack Pro
+
+services:
+  - type: web
+    name: packtrack-pro
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: lax
+      # If you add a Render Disk for persistence, uncomment these and set mount below
+      # - key: DB_DIR
+      #   value: /data
+      # - key: DB_FILE
+      #   value: packtrack.db
+      # - key: DB_PATH
+      #   value: /data/packtrack.db
+
+    # To persist SQLite across deploys, add a disk (paid feature):
+    # disk:
+    #   name: packtrack-data
+    #   mountPath: /data
+    #   sizeGB: 1
+

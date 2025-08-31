@@ -1,0 +1,27 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment & secrets
+.env
+.env.*
+
+# OS/Editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Logs & data
+*.log
+server.log
+packtrack.db
+*.sqlite
+*.sqlite3
+
+# Build output (none currently, but safe)
+dist/
+build/
+
